@@ -1,0 +1,57 @@
+// backend-api/src/services/careerService.js
+import prisma from '../models/prisma.js';
+import cloudinary from '../config/cloudinary.js';
+
+export const getAllCareerSubmissions = async (filter = {}) => {
+  const { isRead } = filter;
+  const where = {};
+  if (isRead !== undefined) where.isRead = isRead;
+
+  const submissions = await prisma.careerSubmission.findMany({
+    where,
+    orderBy: { createdAt: 'desc' },
+  });
+  return submissions;
+};
+
+export const getCareerSubmissionById = async (id) => {
+  const submission = await prisma.careerSubmission.findUnique({ where: { id } });
+  return submission;
+};
+
+export const createCareerSubmission = async (data, resumeFile) => {
+  let resumeUrl = null;
+  let publicId = null;
+
+  if (resumeFile) {
+    // Multer-Cloudinary already uploads the file, we just need its path and filename
+    resumeUrl = resumeFile.path;
+    publicId = resumeFile.filename; // This is the Cloudinary public_id
+  }
+
+  const submission = await prisma.careerSubmission.create({
+    data: {
+      ...data,
+      resumeUrl,
+      publicId,
+    },
+  });
+  // TODO: Add notification logic here (e.g., send email to HR)
+  return submission;
+};
+
+export const updateCareerSubmission = async (id, data) => {
+  const submission = await prisma.careerSubmission.update({ where: { id }, data });
+  return submission;
+};
+
+export const deleteCareerSubmission = async (id) => {
+  const submission = await prisma.careerSubmission.findUnique({ where: { id } });
+
+  if (submission && submission.publicId) {
+    await cloudinary.uploader.destroy(submission.publicId); // Delete resume from Cloudinary
+  }
+
+  await prisma.careerSubmission.delete({ where: { id } });
+  return { message: 'Career submission deleted successfully' };
+};

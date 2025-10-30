@@ -1,0 +1,91 @@
+// backend-api/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User for the company-side website (admin panel)
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(ADMIN) // ADMIN, EDITOR, etc.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+// Project Model for the portfolio
+model Project {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  badge       String    // e.g., Residential, Commercial, Cultural
+  category    String    // e.g., architectural, industrial, masterplan (for filtering)
+  slug        String    @unique // URL-friendly identifier
+  images      Image[]   // Relation to Image model
+  isPublished Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Image Model for projects (each project can have multiple images)
+model Image {
+  id         String   @id @default(uuid())
+  url        String   @unique // Cloudinary/S3 URL
+  publicId   String?  // Cloudinary public_id for easy deletion
+  altText    String?
+  order      Int      @default(0)
+  projectId  String
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade) // Cascade delete
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// Testimonial Model
+model Testimonial {
+  id        String   @id @default(uuid())
+  quote     String
+  author    String
+  title     String?  // e.g., CEO, Lead Architect
+  company   String?
+  isApproved Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Contact Form Submissions
+model ContactSubmission {
+  id        String   @id @default(uuid())
+  fullName  String
+  email     String
+  phone     String?
+  projectType String?
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// Career Form Submissions
+model CareerSubmission {
+  id        String   @id @default(uuid())
+  fullName  String
+  email     String
+  phone     String?
+  resumeUrl String?  // Cloudinary/S3 URL for resume
+  publicId  String?  // Cloudinary public_id for resume
+  message   String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
