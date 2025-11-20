@@ -16,9 +16,13 @@ const allowedOrigins = [
   // Add other allowed origins if necessary
 ];
 
+// Check if the app is running in development or production
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    // Allow localhost during development and explicitly allowed origins in production
+    if (isDevelopment || !origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
