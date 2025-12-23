@@ -45,4 +45,5 @@ const uploadResumeFile = multer({
 // Export middleware functions
 export const uploadSingleImage = uploadImages.single('image');
 export const uploadMultipleImages = uploadImages.array('images', 10);
+export const uploadLogo = uploadImages.single('logo');
 export const uploadResume = uploadResumeFile.single('resume');

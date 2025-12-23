@@ -89,3 +89,13 @@ model CareerSubmission {
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 }
+
+// Client Model for the "Clients" section
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  logo      String   // Cloudinary/S3 URL for the logo
+  publicId  String?  // Cloudinary public_id for easy deletion
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
