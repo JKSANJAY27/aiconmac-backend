@@ -13,6 +13,7 @@
     "prisma:push": "npx prisma db push",
     "prisma:migrate": "npx prisma migrate dev",
     "db:init": "npm run prisma:push && npm run prisma:generate",
+    "db:test": "node scripts/init-db.js",
     "seed": "node prisma/seed.js"
   },
   "keywords": [],
