@@ -2,7 +2,7 @@ services:
   - type: web
     name: aiconmac-backend
     env: node
-    buildCommand: npm ci && npx prisma generate && npx prisma db push --accept-data-loss
+    buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV
