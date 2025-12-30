@@ -6,6 +6,7 @@ import testimonialRoutes from './testimonialRoutes.js';
 import contactRoutes from './contactRoutes.js';
 import careerRoutes from './careerRoutes.js';
 import clientRoutes from './clientRoutes.js';
+import keepAliveRoutes from './keepAliveRoutes.js';
 
 const router = express.Router();
 
@@ -15,5 +16,6 @@ router.use('/testimonials', testimonialRoutes);
 router.use('/contact', contactRoutes);
 router.use('/careers', careerRoutes);
 router.use('/clients', clientRoutes);
+router.use('/keep-alive', keepAliveRoutes);
 
 export default router;

@@ -6,6 +6,9 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
+import { startKeepAliveCron } from './src/services/keepAliveService.js';
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
+  startKeepAliveCron();
 });
