@@ -29,14 +29,20 @@ export const getProjectById = async (id) => {
 };
 
 export const createProject = async (projectData, imageFiles = []) => {
-  const { title, description, badge, category, slug, isPublished } = projectData;
+  const {
+    title, title_ar, title_ru,
+    description, description_ar, description_ru,
+    badge, badge_ar, badge_ru,
+    category, category_ar, category_ru,
+    slug, isPublished
+  } = projectData;
 
   const newProject = await prisma.project.create({
     data: {
-      title,
-      description,
-      badge,
-      category,
+      title, title_ar, title_ru,
+      description, description_ar, description_ru,
+      badge, badge_ar, badge_ru,
+      category, category_ar, category_ru,
       slug,
       isPublished: isPublished === 'true' || isPublished === true,
       images: {
@@ -54,7 +60,13 @@ export const createProject = async (projectData, imageFiles = []) => {
 };
 
 export const updateProject = async (id, projectData, imageFiles = []) => {
-  const { title, description, badge, category, slug, isPublished, existingImageIds = [] } = projectData;
+  const {
+    title, title_ar, title_ru,
+    description, description_ar, description_ru,
+    badge, badge_ar, badge_ru,
+    category, category_ar, category_ru,
+    slug, isPublished, existingImageIds = []
+  } = projectData;
 
   // Find existing images not in existingImageIds and delete them from Cloudinary
   const imagesToDelete = await prisma.image.findMany({
@@ -73,10 +85,10 @@ export const updateProject = async (id, projectData, imageFiles = []) => {
   const updatedProject = await prisma.project.update({
     where: { id },
     data: {
-      title,
-      description,
-      badge,
-      category,
+      title, title_ar, title_ru,
+      description, description_ar, description_ru,
+      badge, badge_ar, badge_ru,
+      category, category_ar, category_ru,
       slug,
       isPublished: isPublished === 'true' || isPublished === true,
       images: {

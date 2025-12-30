@@ -10,11 +10,13 @@ export const getAllClients = async () => {
 };
 
 export const createClient = async (data, file) => {
-    const { name } = data;
+    const { name, name_ar, name_ru } = data;
 
     const newClient = await prisma.client.create({
         data: {
             name,
+            name_ar,
+            name_ru,
             logo: file.path,
             publicId: file.filename,
         },

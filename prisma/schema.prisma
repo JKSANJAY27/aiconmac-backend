@@ -33,6 +33,15 @@ model Project {
   description String
   badge       String    // e.g., Residential, Commercial, Cultural
   category    String    // e.g., architectural, industrial, masterplan (for filtering)
+
+  category_ar String?
+  category_ru String?
+  title_ar    String?
+  title_ru    String?
+  description_ar String?
+  description_ru String?
+  badge_ar    String?
+  badge_ru    String?
   slug        String    @unique // URL-friendly identifier
   images      Image[]   // Relation to Image model
   isPublished Boolean   @default(false)
@@ -60,6 +69,14 @@ model Testimonial {
   author    String
   title     String?  // e.g., CEO, Lead Architect
   company   String?
+  company_ar String?
+  company_ru String?
+  quote_ar  String?
+  quote_ru  String?
+  author_ar String?
+  author_ru String?
+  title_ar  String?
+  title_ru  String?
   isApproved Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -94,6 +111,8 @@ model CareerSubmission {
 model Client {
   id        String   @id @default(uuid())
   name      String
+  name_ar   String?
+  name_ru   String?
   logo      String   // Cloudinary/S3 URL for the logo
   publicId  String?  // Cloudinary public_id for easy deletion
   createdAt DateTime @default(now())
