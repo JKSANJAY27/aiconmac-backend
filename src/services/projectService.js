@@ -13,7 +13,11 @@ export const getAllProjects = async (filter = {}, pagination = {}) => {
   const projects = await prisma.project.findMany({
     where,
     include: { images: { orderBy: { order: 'asc' } } }, // Include images, ordered
-    orderBy: { createdAt: 'desc' },
+    orderBy: [
+      { isPinned: 'desc' },
+      { pinOrder: 'asc' },
+      { createdAt: 'desc' },
+    ],
     skip: skip,
     take: take,
   });
@@ -34,7 +38,7 @@ export const createProject = async (projectData, imageFiles = []) => {
     description, description_ar, description_ru,
     badge, badge_ar, badge_ru,
     category, category_ar, category_ru,
-    slug, isPublished
+    slug, isPublished, isPinned, pinOrder
   } = projectData;
 
   const newProject = await prisma.project.create({
@@ -45,6 +49,8 @@ export const createProject = async (projectData, imageFiles = []) => {
       category, category_ar, category_ru,
       slug,
       isPublished: isPublished === 'true' || isPublished === true,
+      isPinned: isPinned === 'true' || isPinned === true,
+      pinOrder: pinOrder ? parseInt(pinOrder) : 0,
       images: {
         create: imageFiles.map((file, index) => ({
           url: file.path,
@@ -65,7 +71,7 @@ export const updateProject = async (id, projectData, imageFiles = []) => {
     description, description_ar, description_ru,
     badge, badge_ar, badge_ru,
     category, category_ar, category_ru,
-    slug, isPublished, existingImageIds = []
+    slug, isPublished, isPinned, pinOrder, existingImageIds = []
   } = projectData;
 
   // Find existing images not in existingImageIds and delete them from Cloudinary
@@ -91,6 +97,8 @@ export const updateProject = async (id, projectData, imageFiles = []) => {
       category, category_ar, category_ru,
       slug,
       isPublished: isPublished === 'true' || isPublished === true,
+      ...(isPinned !== undefined && { isPinned: isPinned === 'true' || isPinned === true }),
+      ...(pinOrder !== undefined && { pinOrder: parseInt(pinOrder) }),
       images: {
         // Delete images not in the updated list
         deleteMany: {
