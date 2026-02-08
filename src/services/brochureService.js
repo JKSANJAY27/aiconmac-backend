@@ -1,8 +1,12 @@
 import prisma from '../models/prisma.js';
 
 export const createBrochureRequest = async (email) => {
-    return await prisma.brochureRequest.create({
-        data: { email },
+    return await prisma.brochureRequest.upsert({
+        where: { email },
+        update: {
+            count: { increment: 1 }
+        },
+        create: { email },
     });
 };
 

@@ -124,6 +124,8 @@ model Client {
 // Brochure Request Model
 model BrochureRequest {
   id        String   @id @default(uuid())
-  email     String
+  email     String   @unique
+  count     Int      @default(1)
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
