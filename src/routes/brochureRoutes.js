@@ -7,7 +7,7 @@ const router = express.Router();
 // POST /api/brochure-requests - Public
 router.post('/', createBrochureRequest);
 
-// GET /api/brochure-requests - Protected (Admin/Editor)
-router.get('/', protect, authorizeRoles('ADMIN', 'EDITOR'), getBrochureRequests);
+// GET /api/brochure-requests - Protected (Admin/Editor/Viewer)
+router.get('/', protect, authorizeRoles('ADMIN', 'EDITOR', 'VIEWER'), getBrochureRequests);
 
 export default router;

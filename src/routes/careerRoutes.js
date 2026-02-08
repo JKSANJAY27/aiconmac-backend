@@ -8,10 +8,10 @@ const router = express.Router();
 
 router.route('/')
   .post(uploadResume, careerController.createCareerSubmission) // Publicly accessible for submission with resume
-  .get(protect, authorizeRoles('ADMIN', 'EDITOR'), careerController.getCareerSubmissions); // Admin access
+  .get(protect, authorizeRoles('ADMIN', 'EDITOR', 'VIEWER'), careerController.getCareerSubmissions); // Admin access
 
 router.route('/:id')
-  .get(protect, authorizeRoles('ADMIN', 'EDITOR'), careerController.getCareerSubmission)
+  .get(protect, authorizeRoles('ADMIN', 'EDITOR', 'VIEWER'), careerController.getCareerSubmission)
   .put(protect, authorizeRoles('ADMIN', 'EDITOR'), careerController.updateCareerSubmission) // e.g., mark as read
   .delete(protect, authorizeRoles('ADMIN'), careerController.deleteCareerSubmission);
 

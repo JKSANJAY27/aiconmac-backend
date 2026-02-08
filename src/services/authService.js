@@ -37,3 +37,25 @@ export const getCurrentUser = async (userId) => {
   });
   return user;
 };
+
+export const getAllUsers = async () => {
+  const users = await prisma.user.findMany({
+    select: { id: true, email: true, name: true, role: true, createdAt: true },
+    orderBy: { createdAt: 'desc' },
+  });
+  return users;
+};
+
+export const updateUserRole = async (userId, role) => {
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: { role },
+    select: { id: true, email: true, name: true, role: true },
+  });
+  return user;
+};
+
+export const deleteUser = async (userId) => {
+  await prisma.user.delete({ where: { id: userId } });
+  return { message: 'User deleted successfully' };
+};

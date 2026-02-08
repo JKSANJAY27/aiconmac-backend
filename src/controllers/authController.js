@@ -37,3 +37,40 @@ export const getMe = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUsers = async (req, res, next) => {
+  try {
+    const users = await authService.getAllUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateUserRole = async (req, res, next) => {
+  try {
+    const { role } = req.body;
+    if (!role) {
+      res.status(400);
+      throw new Error('Role is required');
+    }
+    const user = await authService.updateUserRole(req.params.id, role);
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  try {
+    // Prevent admin from deleting themselves
+    if (req.user.id === req.params.id) {
+      res.status(400);
+      throw new Error('You cannot delete your own account');
+    }
+    const result = await authService.deleteUser(req.params.id);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};

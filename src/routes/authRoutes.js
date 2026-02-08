@@ -10,4 +10,9 @@ router.post('/register', protect, authorizeRoles('ADMIN'), authController.regist
 router.post('/login', authController.login);
 router.get('/me', protect, authController.getMe);
 
+// User Management Routes (Admin only)
+router.get('/users', protect, authorizeRoles('ADMIN'), authController.getUsers);
+router.put('/users/:id/role', protect, authorizeRoles('ADMIN'), authController.updateUserRole);
+router.delete('/users/:id', protect, authorizeRoles('ADMIN'), authController.deleteUser);
+
 export default router;
