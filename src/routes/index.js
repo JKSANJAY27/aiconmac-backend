@@ -7,6 +7,7 @@ import contactRoutes from './contactRoutes.js';
 import careerRoutes from './careerRoutes.js';
 import clientRoutes from './clientRoutes.js';
 import keepAliveRoutes from './keepAliveRoutes.js';
+import brochureRoutes from './brochureRoutes.js';
 
 const router = express.Router();
 
@@ -17,5 +18,6 @@ router.use('/contact', contactRoutes);
 router.use('/careers', careerRoutes);
 router.use('/clients', clientRoutes);
 router.use('/keep-alive', keepAliveRoutes);
+router.use('/brochure-request', brochureRoutes);
 
 export default router;
